@@ -22,6 +22,9 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             Expanded(child: TopWidget()),
             // CenterWidget(),
+            SizedBox(
+              height: 40,
+            ),
             Expanded(child: BottomWidget()),
           ],
         ),
@@ -35,11 +38,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget BottomWidget() {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(30.0),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(60.0)),
       child: Container(
         color: Colors.red,
         width: double.infinity,
         height: double.infinity,
+        child: Column(
+          children: [Text("hello world")],
+        ),
       ),
     );
   }
