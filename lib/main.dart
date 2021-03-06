@@ -6,7 +6,7 @@ import 'package:koff/history.dart';
 import 'package:koff/home.dart';
 import 'package:koff/login.dart';
 import 'package:koff/signup.dart';
-
+import 'package:flutter/services.dart';
 import 'home.dart';
 
 void main() {
@@ -17,6 +17,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
       title: 'koff',
       theme: ThemeData(
@@ -39,7 +43,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomeScreen(),
         '/login': (context) => LoginPage(),
         '/signup': (context) => SignupPage(),
-        '/histroy': (context) => HistoryPage(),
+        '/history': (context) => HistoryPage(),
       },
     );
   }
