@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:koff/colors.dart';
 import 'package:koff/countdowntest.dart';
+import 'package:koff/history.dart';
 import 'package:koff/home.dart';
 import 'package:koff/login.dart';
 import 'package:koff/recorder.dart';
-// import 'package:koff/recorder2.dart';
-import 'package:permission_handler/permission_handler.dart';  
-
+import 'package:koff/signup.dart';
+import 'package:flutter/services.dart';
 import 'home.dart';
 
 void main() {
@@ -18,13 +18,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    var status = Permission.microphone.request();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
       title: 'koff',
       theme: ThemeData(
         primarySwatch: ColorsClass.mainYellow,
         accentColor: Colors.white,
-        cursorColor: ColorsClass.mainYellow,
+        cursorColor: Colors.white,
         textTheme: TextTheme(
           display2: GoogleFonts.montserrat(
             fontSize: 45,
@@ -39,7 +42,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginPage(),
         '/home': (context) => HomeScreen(),
-        //'/recorder': (context) => RecordToStreamExample(),
+        '/login': (context) => LoginPage(),
+        '/signup': (context) => SignupPage(),
+        '/history': (context) => HistoryPage(),
       },
     );
   }
