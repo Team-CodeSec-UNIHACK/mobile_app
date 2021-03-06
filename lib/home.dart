@@ -52,32 +52,182 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget successOrFailure(bool status) {
+    if (status) {
+      return Text(
+        "success",
+        style: GoogleFonts.montserrat(fontSize: 25, color: Colors.green),
+        textAlign: TextAlign.center,
+      );
+    } else {
+      return Text(
+        "failure",
+        style: GoogleFonts.montserrat(fontSize: 25, color: Colors.red),
+        textAlign: TextAlign.center,
+      );
+    }
+  }
+
   Widget TopWidget() {
     // return Text("koff", style: GoogleFonts.montserrat(fontSize: 55));
     return Container(
       child: Column(
         children: [
-          Icon(Icons.account_box),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Positioned(
+                top: 0.0,
+                right: 0.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: new IconButton(
+                      icon: Icon(
+                        Icons.account_circle,
+                        size: 45,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {}),
+                ),
+              ),
+              SizedBox(
+                width: 80,
+              ),
+              Text(
+                "koff",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.montserrat(
+                  fontSize: 55,
+                  color: Colors.white,
+                  shadows: <Shadow>[
+                    Shadow(
+                      offset: Offset(3.0, 3.0),
+                      blurRadius: 3.0,
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                    Shadow(
+                      offset: Offset(3.0, 3.0),
+                      blurRadius: 8.0,
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Hey there!",
+            style: GoogleFonts.montserrat(
+              fontSize: 55,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("koff",
-                  style: GoogleFonts.montserrat(
-                    fontSize: 55,
-                    color: Colors.white,
-                    shadows: <Shadow>[
-                      Shadow(
-                        offset: Offset(3.0, 3.0),
-                        blurRadius: 3.0,
-                        color: Color.fromARGB(255, 0, 0, 0),
-                      ),
-                      Shadow(
-                        offset: Offset(3.0, 3.0),
-                        blurRadius: 8.0,
-                        color: Colors.black,
-                      ),
-                    ],
-                  )),
+              Text(
+                "Your last test was a ",
+                style: GoogleFonts.montserrat(
+                  fontSize: 25,
+                ),
+              ),
+              SizedBox(
+                width: 1,
+              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  color: Color(0xFFF1F1F1),
+                  width: 100,
+                  height: 30,
+                  child: Center(child: successOrFailure(false)),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 28,
+              ),
+              Text(
+                "Age:",
+                style:
+                    GoogleFonts.montserrat(fontSize: 25, color: Colors.white),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Text(
+                "24",
+                style:
+                    GoogleFonts.montserrat(fontSize: 25, color: Colors.black),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 28,
+              ),
+              Text(
+                "Country:",
+                style:
+                    GoogleFonts.montserrat(fontSize: 25, color: Colors.white),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Text(
+                "Australia",
+                style:
+                    GoogleFonts.montserrat(fontSize: 25, color: Colors.black),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 28,
+              ),
+              Text(
+                "Last test was at:",
+                style:
+                    GoogleFonts.montserrat(fontSize: 25, color: Colors.white),
+              ),
+            ],
+          ),
+          Row(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 28,
+              ),
+              Text(
+                "Feb 24, 5:49 pm",
+                style:
+                    GoogleFonts.montserrat(fontSize: 25, color: Colors.black),
+              ),
             ],
           ),
         ],
@@ -201,13 +351,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 time.hours != null
                                     ? time.hours.toString()
                                     : "00",
-                                style: GoogleFonts.montserrat(fontSize: 35),
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 35,
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                           ),
                         ),
-                        Text("hours", style: GoogleFonts.montserrat())
+                        Text("hours",
+                            style: GoogleFonts.montserrat(
+                                color: Color(0xFFF8A961)))
                       ],
                     ),
 
@@ -231,7 +385,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        Text("minutes", style: GoogleFonts.montserrat())
+                        Text("minutes",
+                            style: GoogleFonts.montserrat(
+                                color: Color(0xFFF8A961)))
                       ],
                     ),
                     SizedBox(
@@ -258,7 +414,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        Text("seconds", style: GoogleFonts.montserrat())
+                        Text("seconds",
+                            style: GoogleFonts.montserrat(
+                                color: Color(0xFFF8A961)))
                       ],
                     ),
                   ],
