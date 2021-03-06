@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:toast/toast.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 
 class HistoryPage extends StatefulWidget {
   HistoryPage({Key key}) : super(key: key);
@@ -38,16 +39,21 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
       floatingActionButton: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: Container(
-          color: Color(0xFFFDEAD9),
-          width: 300,
-          height: 100,
-          child: Center(
-            child: Text(
-              "Authenticate",
-              style: GoogleFonts.montserrat(
-                  fontSize: 25, color: Color(0xFFF8A961)),
-              textAlign: TextAlign.center,
+        child: new InkWell(
+          onTap: () {
+            qrScan();
+          },
+          child: Container(
+            color: Color(0xFFFDEAD9),
+            width: 300,
+            height: 100,
+            child: Center(
+              child: Text(
+                "Authenticate",
+                style: GoogleFonts.montserrat(
+                    fontSize: 25, color: Color(0xFFF8A961)),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
         ),
@@ -177,37 +183,8 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
-  Widget BottomWidget() {
-    return ClipRRect(
-      //borderRadius: BorderRadius.vertical(top: Radius.circular(60.0)),
-      child: Container(
-        color: Colors.black,
-        width: 500,
-        height: 100,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 60,
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                color: Color(0xFFFDEAD9),
-                width: 300,
-                height: 100,
-                child: Center(
-                  child: Text(
-                    "Authenticate",
-                    style: GoogleFonts.montserrat(
-                        fontSize: 25, color: Color(0xFFF8A961)),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  Future qrScan() async {
+    String cameraScanResult = await scanner.scan();
+    print(cameraScanResult);
   }
 }

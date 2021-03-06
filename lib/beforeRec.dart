@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:audio_wave/audio_wave.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
-class RecorderScreen extends StatefulWidget {
-  RecorderScreen({Key key}) : super(key: key);
+class BeforeRecorderScreen extends StatefulWidget {
+  BeforeRecorderScreen({Key key}) : super(key: key);
 
   @override
-  _RecorderScreenState createState() => _RecorderScreenState();
+  _BeforeRecorderScreenState createState() => _BeforeRecorderScreenState();
 }
 
-class _RecorderScreenState extends State<RecorderScreen> {
+class _BeforeRecorderScreenState extends State<BeforeRecorderScreen> {
   @override
   void initState() {
     super.initState();
@@ -27,7 +28,7 @@ class _RecorderScreenState extends State<RecorderScreen> {
             Expanded(child: TopWidget()),
             // CenterWidget(),
             SizedBox(
-              height: 100,
+              height: 90,
             ),
             Expanded(child: BottomWidget()),
           ],
@@ -37,7 +38,32 @@ class _RecorderScreenState extends State<RecorderScreen> {
         borderRadius: BorderRadius.circular(10),
         child: new InkWell(
           onTap: () {
-            print("yo recording stopped");
+            Alert(
+              context: context,
+              type: AlertType.warning,
+              title: "Remember!",
+              desc:
+                  "Recording begins after this, so please start coughing. Please make sure to record atleast 2 seconds of your cough sound before stopping",
+              buttons: [
+                DialogButton(
+                  child: Text(
+                    "Start",
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, "/recorder"),
+                  color: Color.fromRGBO(0, 179, 134, 1.0),
+                ),
+                DialogButton(
+                  child: Text(
+                    "Cancel",
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  color: Color.fromRGBO(0, 179, 134, 1.0),
+                )
+              ],
+            ).show();
           },
           child: Container(
             color: Color(0xFFFDEAD9),
@@ -45,7 +71,7 @@ class _RecorderScreenState extends State<RecorderScreen> {
             height: 50,
             child: Center(
               child: Text(
-                "Done",
+                "Next",
                 style: GoogleFonts.montserrat(
                     fontSize: 25, color: Color(0xFFF8A961)),
                 textAlign: TextAlign.center,
@@ -111,12 +137,30 @@ class _RecorderScreenState extends State<RecorderScreen> {
             ],
           ),
           SizedBox(
-            height: 150,
+            height: 40,
           ),
           Text(
-            "Cough Now!",
+            "In the next step, you will be providing koff with an audio sample of your cough.",
             style: GoogleFonts.montserrat(
-              fontSize: 55,
+              fontSize: 20,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Your Results will appear in the history tab after it has been added to the blockchain",
+            style: GoogleFonts.montserrat(
+              fontSize: 20,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Please Note: This is not a medical diagonois but simply a precautionary measure",
+            style: GoogleFonts.montserrat(
+              fontSize: 20,
             ),
           ),
         ],
@@ -141,6 +185,7 @@ class _RecorderScreenState extends State<RecorderScreen> {
               height: 200,
               width: 251,
               spacing: 2.5,
+              animationLoop: 1,
               bars: [
                 AudioWaveBar(height: 10, color: Colors.black),
                 AudioWaveBar(height: 30, color: Colors.black),

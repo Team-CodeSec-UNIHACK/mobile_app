@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:koff/beforeRec.dart';
 import 'package:koff/colors.dart';
 import 'package:koff/countdowntest.dart';
 import 'package:koff/history.dart';
@@ -18,12 +19,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays([]);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
     return MaterialApp(
       title: 'koff',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: ColorsClass.mainYellow,
         accentColor: Colors.white,
@@ -45,6 +48,8 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/signup': (context) => SignupPage(),
         '/history': (context) => HistoryPage(),
+        '/recorder': (context) => RecorderScreen(),
+        '/before-rec': (context) => BeforeRecorderScreen(),
       },
     );
   }

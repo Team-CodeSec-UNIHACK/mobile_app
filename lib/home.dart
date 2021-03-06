@@ -30,13 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Color(0xFFF8A961),
-      // appBar: AppBar(
-      //   // Here we take the value from the MyHomePage object that was created by
-      //   // the App.build method, and use it to set our appbar title.
-      //   title: Text("koff", style: GoogleFonts.montserrat(fontSize: 55)),
-      //   backgroundColor: Colors.transparent,
-      //   centerTitle: true,
-      // ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -44,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(child: TopWidget()),
             // CenterWidget(),
             SizedBox(
-              height: 100,
+              height: 90,
             ),
             Expanded(child: BottomWidget()),
           ],
@@ -122,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           SizedBox(
-            height: 30,
+            height: 20,
           ),
           Text(
             "Hey there!",
@@ -239,28 +232,46 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget testAvailability(status) {
-    var title = status ? "Test Available" : "Test Unavailable";
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Container(
-        color: Color(0xFFF3FEF6),
-        width: 300,
-        height: 100,
-        child: Center(
-          child: RaisedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/recorder');
-            },
+    if (status) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: new InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, "/before-rec");
+          },
+          child: Container(
+            color: Color(0xFFF3FEF6),
+            width: 300,
+            height: 100,
+            child: Center(
+              child: Text(
+                "Test Available",
+                style: GoogleFonts.montserrat(
+                    fontSize: 25, color: Color(0xFFF8A961)),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
+      );
+    } else {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+          color: Color(0xFFFEF1EF),
+          width: 300,
+          height: 100,
+          child: Center(
             child: Text(
-              title,
+              "Test Unavailable",
               style: GoogleFonts.montserrat(
                   fontSize: 25, color: Color(0xFFF8A961)),
               textAlign: TextAlign.center,
             ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   Widget BottomWidget() {
