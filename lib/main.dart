@@ -5,6 +5,8 @@ import 'package:koff/countdowntest.dart';
 import 'package:koff/home.dart';
 import 'package:koff/login.dart';
 
+import 'home.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -29,8 +31,11 @@ class MyApp extends StatelessWidget {
           body1: GoogleFonts.montserrat(),
         ),
       ),
-      //home: MyHomePage(title: 'Flutter Demo Home Page'),
-      home: LoginPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => LoginPage(),
+        '/home': (context) => HomeScreen(),
+      },
     );
   }
 }

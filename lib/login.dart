@@ -20,8 +20,9 @@ final emailController = TextEditingController();
 final passwordController = TextEditingController();
 
 class _LoginPageState extends State<LoginPage> {
-  _login() async {
+  _login(BuildContext context) async {
     //SharedPreferences prefs = await SharedPreferences.getInstance();
+                Navigator.pushNamed(context, '/home');
   }
 
   @override
@@ -66,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          _login();
+          _login(context);
 
           // Navigator.of(context).pushReplacement(MaterialPageRoute(
           //   builder: (context) => GalleryDemo(),
