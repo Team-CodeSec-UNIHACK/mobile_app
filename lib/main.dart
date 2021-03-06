@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:koff/colors.dart';
 import 'package:koff/countdowntest.dart';
+import 'package:koff/history.dart';
 import 'package:koff/home.dart';
 import 'package:koff/login.dart';
+import 'package:koff/signup.dart';
 
 import 'home.dart';
 
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: ColorsClass.mainYellow,
         accentColor: Colors.white,
-        cursorColor: ColorsClass.mainYellow,
+        cursorColor: Colors.white,
         textTheme: TextTheme(
           display2: GoogleFonts.montserrat(
             fontSize: 45,
@@ -35,6 +37,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginPage(),
         '/home': (context) => HomeScreen(),
+        '/login': (context) => LoginPage(),
+        '/signup': (context) => SignupPage(),
+        '/histroy': (context) => HistoryPage(),
       },
     );
   }

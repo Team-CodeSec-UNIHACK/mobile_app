@@ -4,26 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:koff/colors.dart';
 import 'package:koff/home.dart';
-import 'package:koff/signup.dart';
+import 'package:koff/login.dart';
 import 'package:toast/toast.dart';
 //import 'gallery.dart';
 import 'main.dart';
 //import 'package:toast/toast.dart';
 import 'package:http/http.dart';
 
-class LoginPage extends StatefulWidget {
-  static String tag = 'login-page';
+class SignupPage extends StatefulWidget {
+  static String tag = 'Signup-page';
   @override
-  _LoginPageState createState() => new _LoginPageState();
+  _SignupPageState createState() => new _SignupPageState();
 }
 
-final emailController = TextEditingController();
+final ageController = TextEditingController();
 final passwordController = TextEditingController();
+final reppasswordController = TextEditingController();
 
-class _LoginPageState extends State<LoginPage> {
-  _login(BuildContext context) async {
+class _SignupPageState extends State<SignupPage> {
+  _Signup() async {
     //SharedPreferences prefs = await SharedPreferences.getInstance();
-    Navigator.pushNamed(context, '/home');
   }
 
   @override
@@ -37,13 +37,13 @@ class _LoginPageState extends State<LoginPage> {
     //   ),
     // );
 
-    final email = TextField(
-      controller: emailController,
-      keyboardType: TextInputType.emailAddress,
+    final age = TextField(
+      controller: ageController,
+      keyboardType: TextInputType.number,
       autofocus: false,
       //initialValue: '',
       decoration: InputDecoration(
-        hintText: 'Unique - ID',
+        hintText: 'Age',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
@@ -55,20 +55,32 @@ class _LoginPageState extends State<LoginPage> {
       //initialValue: '',
       obscureText: true,
       decoration: InputDecoration(
-        hintText: 'Password',
+        hintText: 'New Password',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
     );
 
-    final loginButton = Padding(
+    final repeatpassword = TextField(
+      controller: reppasswordController,
+      autofocus: false,
+      //initialValue: '',
+      obscureText: true,
+      decoration: InputDecoration(
+        hintText: 'Repeat New Password',
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+      ),
+    );
+
+    final SignupButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          _login(context);
+          _Signup();
 
           // Navigator.of(context).pushReplacement(MaterialPageRoute(
           //   builder: (context) => GalleryDemo(),
@@ -76,7 +88,8 @@ class _LoginPageState extends State<LoginPage> {
         },
         padding: EdgeInsets.all(12),
         color: Colors.white,
-        child: Text('Log In', style: TextStyle(color: ColorsClass.mainYellow)),
+        child: Text('Register for koff',
+            style: TextStyle(color: ColorsClass.mainYellow)),
       ),
     );
     final signupButton = Padding(
@@ -86,13 +99,15 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => SignupPage(),
+          _Signup();
+
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => LoginPage(),
           ));
         },
         padding: EdgeInsets.all(12),
         color: Colors.white,
-        child: Text('Using for the first time?',
+        child: Text('Login instead',
             style: TextStyle(color: ColorsClass.mainYellow)),
       ),
     );
@@ -102,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
       textAlign: TextAlign.center,
       style: GoogleFonts.montserrat(
         fontSize: 55,
-        color: ColorsClass.mainYellow,
+        color: Colors.white,
         shadows: <Shadow>[
           Shadow(
             offset: Offset(3.0, 3.0),
@@ -125,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
     //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 36.0),
     // );
     final belowlogoLabel = Text(
-      'Login',
+      'Signup',
       textAlign: TextAlign.center,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
@@ -143,11 +158,13 @@ class _LoginPageState extends State<LoginPage> {
             logoLabel,
             belowlogoLabel,
             SizedBox(height: 30.0),
-            email,
+            age,
             SizedBox(height: 8.0),
             password,
+            SizedBox(height: 8.0),
+            repeatpassword,
             SizedBox(height: 24.0),
-            loginButton,
+            SignupButton,
             // SizedBox(height: 5.0),
             signupButton,
           ],

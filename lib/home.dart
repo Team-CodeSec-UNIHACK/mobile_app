@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_countdown_timer/index.dart';
+import 'package:koff/history.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -90,7 +91,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: 45,
                         color: Colors.white,
                       ),
-                      onPressed: () {}),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/history');
+                      }),
                 ),
               ),
               SizedBox(
