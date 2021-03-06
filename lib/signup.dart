@@ -5,7 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:koff/colors.dart';
 import 'package:koff/home.dart';
 import 'package:koff/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
+import 'package:uuid/uuid.dart';
 //import 'gallery.dart';
 import 'main.dart';
 //import 'package:toast/toast.dart';
@@ -23,7 +25,9 @@ final reppasswordController = TextEditingController();
 
 class _SignupPageState extends State<SignupPage> {
   _Signup() async {
-    //SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var uuid = Uuid();
+    print(uuid.v4().toString());
   }
 
   @override

@@ -5,9 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:koff/colors.dart';
 import 'package:koff/home.dart';
 import 'package:koff/signup.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 //import 'gallery.dart';
 import 'main.dart';
+import 'package:uuid/uuid.dart';
 //import 'package:toast/toast.dart';
 import 'package:http/http.dart';
 
@@ -22,8 +24,12 @@ final passwordController = TextEditingController();
 
 class _LoginPageState extends State<LoginPage> {
   _login(BuildContext context) async {
-    //SharedPreferences prefs = await SharedPreferences.getInstance();
-    Navigator.pushNamed(context, '/home');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String uuid = emailController.text.toString();
+    String password = passwordController.text.toString();
+    if (uuid != "" && password != "") {
+    } else {}
   }
 
   @override
