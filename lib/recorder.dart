@@ -1,6 +1,14 @@
+import 'dart:async';
+import 'dart:io' as io;
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:audio_wave/audio_wave.dart';
+import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:file/file.dart';
+import 'package:file/local.dart';
+import 'package:flutter/services.dart';
 
 class RecorderScreen extends StatefulWidget {
   RecorderScreen({Key key}) : super(key: key);
@@ -10,8 +18,38 @@ class RecorderScreen extends StatefulWidget {
 }
 
 class _RecorderScreenState extends State<RecorderScreen> {
+  LocalFileSystem localFileSystem;
+  File recordingFile;
+  var recordingItem;
+  var recorderItem;
+
+  initRecorder() async {
+    bool hasPermission = await FlutterAudioRecorder.hasPermissions;
+    print(hasPermission);
+    Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
+    print(tempPath);
+    var recorder = FlutterAudioRecorder(tempPath, audioFormat: AudioFormat.WAV);
+    await recorder.initialized;
+    setState(() {
+      recorderItem = recorder;
+    });
+    startRecording(recorder);
+  }
+
+  startRecording(var recorder) async {
+    await recorder.start();
+    var recording = await recorder.current(channel: 0);
+  }
+
+  stopRecording() async {
+    var result = await recorderItem.stop();
+    //File file = widget.localFileSystem.file(result.path);
+  }
+
   @override
   void initState() {
+    initRecorder();
     super.initState();
   }
 
