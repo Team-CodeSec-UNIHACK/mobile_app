@@ -4,6 +4,9 @@ import 'package:koff/colors.dart';
 import 'package:koff/countdowntest.dart';
 import 'package:koff/home.dart';
 import 'package:koff/login.dart';
+import 'package:koff/recorder.dart';
+// import 'package:koff/recorder2.dart';
+import 'package:permission_handler/permission_handler.dart';  
 
 import 'home.dart';
 
@@ -15,6 +18,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    var status = Permission.microphone.request();
     return MaterialApp(
       title: 'koff',
       theme: ThemeData(
@@ -35,6 +39,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginPage(),
         '/home': (context) => HomeScreen(),
+        //'/recorder': (context) => RecordToStreamExample(),
       },
     );
   }

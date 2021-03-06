@@ -236,41 +236,28 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget testAvailability(status) {
-    if (status) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: Container(
-          color: Color(0xFFF3FEF6),
-          width: 300,
-          height: 100,
-          child: Center(
+    var title = status ? "Test Available" : "Test Unavailable";
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        color: Color(0xFFF3FEF6),
+        width: 300,
+        height: 100,
+        child: Center(
+          child: RaisedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/recorder');
+            },
             child: Text(
-              "Test Available",
+              title,
               style: GoogleFonts.montserrat(
                   fontSize: 25, color: Color(0xFFF8A961)),
               textAlign: TextAlign.center,
             ),
           ),
         ),
-      );
-    } else {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: Container(
-          color: Color(0xFFFEF1EF),
-          width: 300,
-          height: 100,
-          child: Center(
-            child: Text(
-              "Test Unavailable",
-              style: GoogleFonts.montserrat(
-                  fontSize: 25, color: Color(0xFFF8A961)),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-      );
-    }
+      ),
+    );
   }
 
   Widget BottomWidget() {
@@ -469,7 +456,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 60,
             ),
-            testAvailability(false),
+            testAvailability(true),
           ],
         ),
       ),
