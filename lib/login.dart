@@ -3,15 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:koff/colors.dart';
-import 'package:koff/home.dart';
+import 'package:koff/main.dart';
 import 'package:koff/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
-//import 'gallery.dart';
-import 'main.dart';
-import 'package:uuid/uuid.dart';
 //import 'package:toast/toast.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'package:toast/toast.dart';
 
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
@@ -29,7 +26,15 @@ class _LoginPageState extends State<LoginPage> {
     String uuid = emailController.text.toString();
     String password = passwordController.text.toString();
     if (uuid != "" && password != "") {
-    } else {}
+      var reqbody = {"uuid": uuid, "password": password};
+      String endpoint = MyApp.endpoint + "/login";
+      var response = await http.post(endpoint, body: json.encode(reqbody));
+      final Map parsed = json.decode(response.body);
+      print(parsed);
+    } else {
+      Toast.show("Please check your input", context,
+          duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+    }
   }
 
   @override

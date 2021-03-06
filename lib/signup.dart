@@ -11,7 +11,7 @@ import 'package:uuid/uuid.dart';
 //import 'gallery.dart';
 import 'main.dart';
 //import 'package:toast/toast.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 class SignupPage extends StatefulWidget {
   static String tag = 'Signup-page';
@@ -27,7 +27,29 @@ class _SignupPageState extends State<SignupPage> {
   _Signup() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var uuid = Uuid();
-    print(uuid.v4().toString());
+    // print(uuid.v4().toString());
+    String newuuid = uuid.v4().toString();
+    String age = ageController.text.toString();
+    String password = passwordController.text.toString();
+    String repeatpass = reppasswordController.text.toString();
+    if (age != "" && (password == repeatpass)) {
+      var reqbody = {"uuid": newuuid, "password": password, "age": age};
+      String endpoint = MyApp.endpoint + "/register";
+      var response = await http.post(endpoint, body: json.encode(reqbody));
+      final Map parsed = json.decode(response.body);
+      print(parsed);
+      if (parsed["message"] == "success") {
+        String token = parsed["token"];
+        prefs.setString("token", token);
+        Navigator.pushReplacementNamed(context, "/home");
+      } else {
+        Toast.show("Signup failed, please try again", context,
+            duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+      }
+    } else {
+      Toast.show("Please check your input", context,
+          duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+    }
   }
 
   @override

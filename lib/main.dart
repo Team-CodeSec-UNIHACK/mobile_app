@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:koff/beforeRec.dart';
+import 'package:koff/checking.dart';
 import 'package:koff/colors.dart';
 import 'package:koff/countdowntest.dart';
 import 'package:koff/history.dart';
@@ -16,6 +17,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  static String endpoint = "https://koff-backend.ratemycourse.review";
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -41,10 +43,11 @@ class MyApp extends StatelessWidget {
           body1: GoogleFonts.montserrat(),
         ),
       ),
-      initialRoute: '/',
+      initialRoute: '/auth',
       routes: {
         '/': (context) => LoginPage(),
         '/home': (context) => HomeScreen(),
+        '/auth': (context) => checkingPage(),
         '/login': (context) => LoginPage(),
         '/signup': (context) => SignupPage(),
         '/history': (context) => HistoryPage(),
