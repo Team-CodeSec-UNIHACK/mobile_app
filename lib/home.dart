@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Expanded(child: TopWidget()),
+            Expanded(child: topWidget()),
             // CenterWidget(),
             SizedBox(
               height: 90,
@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Widget TopWidget() {
+  Widget topWidget() {
     // return Text("koff", style: GoogleFonts.montserrat(fontSize: 55));
     return Container(
       child: Column(

@@ -1,12 +1,14 @@
 import 'dart:async';
-import 'dart:io';
 
+import 'dart:io' as io;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:audio_wave/audio_wave.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter/services.dart';
+import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
 
 class RecorderScreen extends StatefulWidget {
   //RecorderScreen({Key key}) : super(key: key);
@@ -18,57 +20,121 @@ class RecorderScreen extends StatefulWidget {
 }
 
 class _RecorderScreenState extends State<RecorderScreen> {
-  File recordingFile;
-  var recordingItem;
-  var recorderItem;
-  Future<Directory> _tempDirectory;
-  Future<Directory> _appSupportDirectory;
-  Future<Directory> _appLibraryDirectory;
-  Future<Directory> _appDocumentsDirectory;
-  void _requestTempDirectory() {
-    setState(() {
-      _tempDirectory = getTemporaryDirectory();
-      print("matt");
-      print(_tempDirectory.then((value) => print(value.path)));
-    });
-  }
+  FlutterAudioRecorder _recorder;
+  Recording _current;
+  RecordingStatus _currentStatus = RecordingStatus.Unset;
 
   initRecorder() async {
-    _requestTempDirectory();
-    bool hasPermission = await FlutterAudioRecorder.hasPermissions;
-    print(hasPermission);
-    Directory tempDir = await getTemporaryDirectory();
-    String tempPath = tempDir.toString();
-    // Directory appDocDir = await getApplicationDocumentsDirectory();
-    // String tempPath = appDocDir.path;
-    print(tempPath);
-    var recorder = FlutterAudioRecorder(tempPath, audioFormat: AudioFormat.WAV);
-    await recorder.initialized;
-    setState(() {
-      recorderItem = recorder;
-    });
-    startRecording(recorder);
+    try {
+      if (await FlutterAudioRecorder.hasPermissions) {
+        String customPath = '/flutter_audio_recorder_';
+        io.Directory appDocDirectory;
+//        io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
+        if (io.Platform.isIOS) {
+          appDocDirectory = await getApplicationDocumentsDirectory();
+        } else {
+          appDocDirectory = await getExternalStorageDirectory();
+        }
+
+        // can add extension like ".mp4" ".wav" ".m4a" ".aac"
+        customPath = appDocDirectory.path +
+            customPath +
+            DateTime.now().millisecondsSinceEpoch.toString();
+
+        // .wav <---> AudioFormat.WAV
+        // .mp4 .m4a .aac <---> AudioFormat.AAC
+        // AudioFormat is optional, if given value, will overwrite path extension when there is conflicts.
+        _recorder =
+            FlutterAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
+
+        await _recorder.initialized;
+        // after initialization
+        var current = await _recorder.current(channel: 0);
+        print(current);
+        // should be "Initialized", if all working fine
+        setState(() {
+          _current = current;
+          _currentStatus = current.status;
+          print(_currentStatus);
+        });
+        await startRecording();
+      } else {
+        Scaffold.of(context).showSnackBar(
+            new SnackBar(content: new Text("You must accept permissions")));
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
-  startRecording(var recorder) async {
-    await recorder.start();
-    var recording = await recorder.current(channel: 0);
+  startRecording() async {
+    try {
+      await _recorder.start();
+      var recording = await _recorder.current(channel: 0);
+      setState(() {
+        _current = recording;
+      });
+
+      const tick = const Duration(milliseconds: 50);
+      new Timer.periodic(tick, (Timer t) async {
+        if (_currentStatus == RecordingStatus.Stopped) {
+          t.cancel();
+        }
+
+        var current = await _recorder.current(channel: 0);
+        // print(current.status);
+        setState(() {
+          _current = current;
+          _currentStatus = _current.status;
+        });
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   stopRecording() async {
-    var result = await recorderItem.stop();
-    //File file = widget.localFileSystem.file(result.path);
-    //print(result.path);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString("token");
+    var vertifyUrl = "https://koff-backend.ratemycourse.review/verify";
+    var result = await _recorder.stop();
+    var audioFilePath = result.path;
+    print("Stop recording: ${result.path}");
+    print("Stop recording: ${result.duration}");
+    String fileName = audioFilePath.split('/').last;
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(audioFilePath, filename: fileName),
+      "token": token
+    });
+    Dio dio = new Dio();
+    Toast.show("Uploading...", context,
+        duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    var response = await dio.post(vertifyUrl, data: formData);
+    print(response);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      const tick = const Duration(milliseconds: 500);
+      Toast.show("Uploaded", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      new Timer.periodic(tick, (Timer t) async {
+        t.cancel();
+        Navigator.pushNamed(context, "/home");
+      });
+      print("Uploaded!");
+    }
+    setState(() {
+      _current = result;
+      _currentStatus = _current.status;
+    });
   }
 
   @override
   void initState() {
     super.initState();
+    initRecorder();
   }
 
   @override
   Widget build(BuildContext context) {
-    initRecorder();
     //_requestTempDirectory();
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -77,12 +143,12 @@ class _RecorderScreenState extends State<RecorderScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Expanded(child: TopWidget()),
+            Expanded(child: topWidget()),
             // CenterWidget(),
             SizedBox(
               height: 100,
             ),
-            Expanded(child: BottomWidget()),
+            Expanded(child: bottomWidget()),
           ],
         ),
       ),
@@ -90,6 +156,7 @@ class _RecorderScreenState extends State<RecorderScreen> {
         borderRadius: BorderRadius.circular(10),
         child: new InkWell(
           onTap: () {
+            stopRecording();
             print("yo recording stopped");
           },
           child: Container(
@@ -111,7 +178,7 @@ class _RecorderScreenState extends State<RecorderScreen> {
     );
   }
 
-  Widget TopWidget() {
+  Widget topWidget() {
     // return Text("koff", style: GoogleFonts.montserrat(fontSize: 55));
     return Container(
       child: Column(
@@ -177,7 +244,7 @@ class _RecorderScreenState extends State<RecorderScreen> {
     );
   }
 
-  Widget BottomWidget() {
+  Widget bottomWidget() {
     return ClipRRect(
       borderRadius: BorderRadius.vertical(top: Radius.circular(60.0)),
       child: Container(
