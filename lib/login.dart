@@ -31,9 +31,15 @@ class _LoginPageState extends State<LoginPage> {
       var response = await http.post(endpoint, body: json.encode(reqbody));
       final Map parsed = json.decode(response.body);
       print(parsed);
-    } else {
-      Toast.show("Please check your input", context,
-          duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+      if (parsed["message"] == "success") {
+        String token = parsed["token"];
+        prefs.setString("token", token);
+        prefs.setBool("verify", true);
+        Navigator.pushReplacementNamed(context, "/home");
+      } else {
+        Toast.show("Login failed, please try again", context,
+            duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+      }
     }
   }
 

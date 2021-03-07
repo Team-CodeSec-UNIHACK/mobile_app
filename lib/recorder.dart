@@ -27,7 +27,7 @@ class _RecorderScreenState extends State<RecorderScreen> {
   Future<Directory> _appDocumentsDirectory;
   void _requestTempDirectory() {
     setState(() {
-      _tempDirectory = getTemporaryDirectory();
+      _tempDirectory = getExternalStorageDirectory();
       print("matt");
       print(_tempDirectory.then((value) => print(value.path)));
     });
@@ -37,12 +37,15 @@ class _RecorderScreenState extends State<RecorderScreen> {
     _requestTempDirectory();
     bool hasPermission = await FlutterAudioRecorder.hasPermissions;
     print(hasPermission);
-    Directory tempDir = await getTemporaryDirectory();
+    // Directory tempDir = await getTemporaryDirectory();
+    Directory tempDir = await _tempDirectory;
     String tempPath = tempDir.toString();
     // Directory appDocDir = await getApplicationDocumentsDirectory();
     // String tempPath = appDocDir.path;
-    print(tempPath);
-    var recorder = FlutterAudioRecorder(tempPath, audioFormat: AudioFormat.WAV);
+    print(tempDir.parent.parent.parent.parent.toString());
+    var recorder = FlutterAudioRecorder(
+        tempDir.parent.parent.parent.parent.toString(),
+        audioFormat: AudioFormat.WAV);
     await recorder.initialized;
     setState(() {
       recorderItem = recorder;
@@ -57,18 +60,19 @@ class _RecorderScreenState extends State<RecorderScreen> {
 
   stopRecording() async {
     var result = await recorderItem.stop();
-    //File file = widget.localFileSystem.file(result.path);
-    //print(result.path);
+    // File file = widget.localFileSystem.file(result.path);
+    // print(result.path);
   }
 
   @override
   void initState() {
+    initRecorder();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    initRecorder();
+    //initRecorder();
     //_requestTempDirectory();
     return Scaffold(
       extendBodyBehindAppBar: true,

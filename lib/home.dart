@@ -18,6 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   //stateVars
   bool successorfaillasttest = false;
   int age = 0;
+  String lastTestTime = "loading..";
 
   @override
   void initState() {
@@ -171,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 5,
               ),
               Text(
-                "24",
+                age.toString(),
                 style:
                     GoogleFonts.montserrat(fontSize: 25, color: Colors.black),
               ),
@@ -224,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 28,
               ),
               Text(
-                "Feb 24, 5:49 pm",
+                lastTestTime,
                 style:
                     GoogleFonts.montserrat(fontSize: 25, color: Colors.black),
               ),
