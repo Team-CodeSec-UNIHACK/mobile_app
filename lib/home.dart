@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_countdown_timer/index.dart';
 import 'package:koff/history.dart';
+import 'package:koff/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -19,9 +24,43 @@ class _HomeScreenState extends State<HomeScreen> {
   bool successorfaillasttest = false;
   int age = 0;
   String lastTestTime = "loading..";
+  bool testavail = false;
+  String timestamp = "";
+
+  void parseDateAndResetTimer() async {
+    DateTime dateTime = DateTime.parse(timestamp);
+    print(dateTime.microsecondsSinceEpoch);
+    var futuredate = dateTime.microsecondsSinceEpoch;
+    setState(() {
+      endTime = futuredate - DateTime.now().millisecondsSinceEpoch;
+      lastTestTime = dateTime.day.toString() +
+          "/" +
+          dateTime.month.toString() +
+          "/" +
+          dateTime.year.toString();
+    });
+  }
+
+  void getHomeData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString("token");
+    String endpoint = MyApp.endpoint + "/home/" + token;
+    var response = await http.get(endpoint);
+    final Map parsed = json.decode(response.body);
+    print(parsed);
+    setState(() {
+      successorfaillasttest = parsed["last_test"];
+      age = parsed["age"];
+      testavail = parsed["test_avail"];
+      timestamp = parsed["last_test_timestamp"];
+    });
+    prefs.setString("uuid", parsed["uuid"]);
+    parseDateAndResetTimer();
+  }
 
   @override
   void initState() {
+    getHomeData();
     super.initState();
     controller = CountdownTimerController(endTime: endTime, onEnd: onEnd);
   }
@@ -212,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 28,
               ),
               Text(
-                "Last test was at:",
+                "Last test was on:",
                 style:
                     GoogleFonts.montserrat(fontSize: 25, color: Colors.white),
               ),
@@ -475,7 +514,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 60,
             ),
-            testAvailability(true),
+            testAvailability(testavail),
           ],
         ),
       ),

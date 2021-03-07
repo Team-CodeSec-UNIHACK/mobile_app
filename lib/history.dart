@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:koff/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:http/http.dart' as http;
 
 class HistoryPage extends StatefulWidget {
   HistoryPage({Key key}) : super(key: key);
@@ -11,7 +16,41 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  List model = [{}, {}, {}];
+  List model = [
+    {
+      "timestamp": "2021-03-07T00:02:28+00:00",
+      "result": false,
+      "blockID": "loading"
+    },
+    {
+      "timestamp": "2021-03-06T23:34:06+00:00",
+      "result": FractionalOffset,
+      "blockID": "loading"
+    },
+    {
+      "timestamp": "2021-03-06T23:20:23+00:00",
+      "result": false,
+      "blockID": "loading"
+    }
+  ];
+
+  void getHistory() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString("token");
+    String endpoint = MyApp.endpoint + "/history/" + token;
+    var response = await http.get(endpoint);
+    final List parsed = json.decode(response.body);
+    print(parsed);
+    setState(() {
+      model = parsed;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
