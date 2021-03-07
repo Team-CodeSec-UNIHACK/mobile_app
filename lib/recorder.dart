@@ -1,20 +1,18 @@
 import 'dart:async';
-import 'dart:io' as io;
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:audio_wave/audio_wave.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:file/file.dart';
-import 'package:file/local.dart';
 import 'package:flutter/services.dart';
 
 class RecorderScreen extends StatefulWidget {
   //RecorderScreen({Key key}) : super(key: key);
-  LocalFileSystem localFileSystem;
-  RecorderScreen({localFileSystem})
-      : this.localFileSystem = localFileSystem ?? LocalFileSystem();
+  // LocalFileSystem localFileSystem;
+  //RecorderScreen({localFileSystem})
+  //    : this.localFileSystem = localFileSystem ?? LocalFileSystem();
   @override
   _RecorderScreenState createState() => _RecorderScreenState();
 }
@@ -23,12 +21,24 @@ class _RecorderScreenState extends State<RecorderScreen> {
   File recordingFile;
   var recordingItem;
   var recorderItem;
+  Future<Directory> _tempDirectory;
+  Future<Directory> _appSupportDirectory;
+  Future<Directory> _appLibraryDirectory;
+  Future<Directory> _appDocumentsDirectory;
+  void _requestTempDirectory() {
+    setState(() {
+      _tempDirectory = getTemporaryDirectory();
+      print("matt");
+      print(_tempDirectory.then((value) => print(value.path)));
+    });
+  }
 
   initRecorder() async {
+    _requestTempDirectory();
     bool hasPermission = await FlutterAudioRecorder.hasPermissions;
     print(hasPermission);
     Directory tempDir = await getTemporaryDirectory();
-    String tempPath = tempDir.path;
+    String tempPath = tempDir.toString();
     // Directory appDocDir = await getApplicationDocumentsDirectory();
     // String tempPath = appDocDir.path;
     print(tempPath);
@@ -47,18 +57,19 @@ class _RecorderScreenState extends State<RecorderScreen> {
 
   stopRecording() async {
     var result = await recorderItem.stop();
-    File file = widget.localFileSystem.file(result.path);
-    print(result.path);
+    //File file = widget.localFileSystem.file(result.path);
+    //print(result.path);
   }
 
   @override
   void initState() {
-    initRecorder();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    initRecorder();
+    //_requestTempDirectory();
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Color(0xFFF8A961),
