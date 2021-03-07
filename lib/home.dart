@@ -15,6 +15,10 @@ class _HomeScreenState extends State<HomeScreen> {
   int endTime = DateTime.now().millisecondsSinceEpoch +
       Duration(days: 0, hours: 1, seconds: 30).inMilliseconds;
 
+  //stateVars
+  bool successorfaillasttest = false;
+  int age = 0;
+
   @override
   void initState() {
     super.initState();
@@ -144,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Color(0xFFF1F1F1),
                   width: 100,
                   height: 30,
-                  child: Center(child: successOrFailure(false)),
+                  child: Center(child: successOrFailure(successorfaillasttest)),
                 ),
               ),
             ],

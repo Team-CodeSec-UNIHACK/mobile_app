@@ -11,6 +11,7 @@ import 'package:koff/recorder.dart';
 import 'package:koff/signup.dart';
 import 'package:flutter/services.dart';
 import 'home.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() {
   runApp(MyApp());
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           body1: GoogleFonts.montserrat(),
         ),
       ),
+      builder: EasyLoading.init(),
       initialRoute: '/auth',
       routes: {
         '/': (context) => LoginPage(),

@@ -11,14 +11,15 @@ import 'package:file/local.dart';
 import 'package:flutter/services.dart';
 
 class RecorderScreen extends StatefulWidget {
-  RecorderScreen({Key key}) : super(key: key);
-
+  //RecorderScreen({Key key}) : super(key: key);
+  LocalFileSystem localFileSystem;
+  RecorderScreen({localFileSystem})
+      : this.localFileSystem = localFileSystem ?? LocalFileSystem();
   @override
   _RecorderScreenState createState() => _RecorderScreenState();
 }
 
 class _RecorderScreenState extends State<RecorderScreen> {
-  LocalFileSystem localFileSystem;
   File recordingFile;
   var recordingItem;
   var recorderItem;
@@ -28,6 +29,8 @@ class _RecorderScreenState extends State<RecorderScreen> {
     print(hasPermission);
     Directory tempDir = await getTemporaryDirectory();
     String tempPath = tempDir.path;
+    // Directory appDocDir = await getApplicationDocumentsDirectory();
+    // String tempPath = appDocDir.path;
     print(tempPath);
     var recorder = FlutterAudioRecorder(tempPath, audioFormat: AudioFormat.WAV);
     await recorder.initialized;
@@ -44,7 +47,8 @@ class _RecorderScreenState extends State<RecorderScreen> {
 
   stopRecording() async {
     var result = await recorderItem.stop();
-    //File file = widget.localFileSystem.file(result.path);
+    File file = widget.localFileSystem.file(result.path);
+    print(result.path);
   }
 
   @override

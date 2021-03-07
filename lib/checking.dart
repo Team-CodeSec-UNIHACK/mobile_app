@@ -12,11 +12,29 @@ class _checkingPageState extends State<checkingPage> {
   void checkState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString("token");
-    if (token != "") {
-      Navigator.pushReplacementNamed(context, "/home");
+    bool voicerec = prefs.getBool("verify");
+
+    if (token != null) {
+      if (voicerec != null) {
+        if (!voicerec) {
+          Navigator.pushReplacementNamed(context, "/before-rec");
+        } else {
+          Navigator.pushReplacementNamed(context, "/home");
+        }
+      } else {
+        Navigator.pushReplacementNamed(context, "/home");
+      }
+      print(token);
+      // Navigator.pushReplacementNamed(context, "/home");
     } else {
-      Navigator.pushReplacementNamed(context, "/home");
+      Navigator.pushReplacementNamed(context, "/signup");
     }
+  }
+
+  @override
+  void initState() {
+    checkState();
+    super.initState();
   }
 
   @override

@@ -36,12 +36,14 @@ class _SignupPageState extends State<SignupPage> {
       var reqbody = {"uuid": newuuid, "password": password, "age": age};
       String endpoint = MyApp.endpoint + "/register";
       var response = await http.post(endpoint, body: json.encode(reqbody));
+      print(response.statusCode);
       final Map parsed = json.decode(response.body);
       print(parsed);
       if (parsed["message"] == "success") {
         String token = parsed["token"];
         prefs.setString("token", token);
-        Navigator.pushReplacementNamed(context, "/home");
+        prefs.setBool("verify", false);
+        Navigator.pushReplacementNamed(context, "/before-rec");
       } else {
         Toast.show("Signup failed, please try again", context,
             duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
