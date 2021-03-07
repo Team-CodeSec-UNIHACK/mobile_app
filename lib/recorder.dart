@@ -120,6 +120,7 @@ class _RecorderScreenState extends State<RecorderScreen> {
         Navigator.pushNamed(context, "/home");
       });
       print("Uploaded!");
+      prefs.setBool("verify", true);
     }
     setState(() {
       _current = result;
